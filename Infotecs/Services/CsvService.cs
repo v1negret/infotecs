@@ -2,12 +2,13 @@ using System.Globalization;
 using CsvHelper;
 using Infotecs.Models;
 using Infotecs.Models.Entities;
+using Infotecs.Services.Interfaces;
 using Infotecs.Shared;
 using Microsoft.Extensions.Localization;
 
 namespace Infotecs.Services;
 
-public class CsvService
+public class CsvService : ICsvService
 {
     private readonly IStringLocalizer<SharedResources> _localizer;
 

@@ -2,18 +2,19 @@ using Infotecs.Models;
 using Infotecs.Models.Dto;
 using Infotecs.Models.Entities;
 using Infotecs.Models.Requests;
-using Infotecs.Repositories;
+using Infotecs.Repositories.Interfaces;
+using Infotecs.Services.Interfaces;
 
 namespace Infotecs.Services;
 
-public class FileService
+public class FileService : IFileService
 {
-    private readonly CsvService _csvService;
-    private readonly TimescaleDataAggregator _timescaleDataAggregator;
-    private readonly FileRepository _fileRepository;
+    private readonly ICsvService _csvService;
+    private readonly ITimescaleDataAggregator _timescaleDataAggregator;
+    private readonly IFileRepository _fileRepository;
 
-    public FileService(CsvService csvService, TimescaleDataAggregator timescaleDataAggregator,
-        FileRepository fileRepository)
+    public FileService(ICsvService csvService, ITimescaleDataAggregator timescaleDataAggregator,
+        IFileRepository fileRepository)
     {
         _csvService = csvService;
         _timescaleDataAggregator = timescaleDataAggregator;
@@ -24,7 +25,7 @@ public class FileService
     {
         var fileEntity = new FileEntity
         {
-            Name = file.Name,
+            Name = file.FileName,
         };
         var values = (await _csvService.ReadAsync(file));
         if (!values.IsSuccess)

@@ -6,6 +6,6 @@ public class FileDto
     public string Name { get; set; } = string.Empty;
     public DateTime CreationTime { get; set; }
     public DateTime UpdateTime { get; set; }
-    public List<ValueDto> Values { get; set; }
+    public List<ValueDto>? Values { get; set; }
     public ResultDto? Result { get; set; }
 }

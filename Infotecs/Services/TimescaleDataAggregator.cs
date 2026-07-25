@@ -1,9 +1,10 @@
 using Infotecs.Models;
 using Infotecs.Models.Entities;
+using Infotecs.Services.Interfaces;
 
 namespace Infotecs.Services;
 
-public class TimescaleDataAggregator
+public class TimescaleDataAggregator : ITimescaleDataAggregator
 {
     public Result<ResultEntity> Aggregate(ICollection<ValueEntity> values)
     {

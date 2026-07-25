@@ -1,6 +1,8 @@
 using Infotecs.Data;
 using Infotecs.Repositories;
+using Infotecs.Repositories.Interfaces;
 using Infotecs.Services;
+using Infotecs.Services.Interfaces;
 using Infotecs.Shared;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,10 +21,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 });
 
 builder.Services.AddLocalization();
-builder.Services.AddScoped<CsvService>();
-builder.Services.AddScoped<FileRepository>();
-builder.Services.AddScoped<TimescaleDataAggregator>();
-builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<ICsvService, CsvService>();
+builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<ITimescaleDataAggregator, TimescaleDataAggregator>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();
 

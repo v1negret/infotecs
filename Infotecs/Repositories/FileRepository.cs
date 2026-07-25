@@ -3,13 +3,14 @@ using Infotecs.Extensions;
 using Infotecs.Models;
 using Infotecs.Models.Entities;
 using Infotecs.Models.Requests;
+using Infotecs.Repositories.Interfaces;
 using Infotecs.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Infotecs.Repositories;
 
-public class FileRepository
+public class FileRepository : IFileRepository
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly IStringLocalizer<SharedResources> _localizer;

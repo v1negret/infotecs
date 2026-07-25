@@ -17,6 +17,7 @@ public class Result<TValue>
     {
         IsSuccess = isSuccess;
         StatusCode = statusCode;
+        Value = value;
         Message = message;
     }
     public bool IsSuccess { get; set; }

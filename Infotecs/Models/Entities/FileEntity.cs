@@ -9,7 +9,7 @@ public class FileEntity
     public DateTime CreationTime { get; set; }
     public DateTime UpdateTime { get; set; }
     
-    public List<ValueEntity> Values { get; set; }
+    public List<ValueEntity>? Values { get; set; }
     public ResultEntity? Result { get; set; }
 
     public FileDto ToDto() =>
@@ -19,7 +19,7 @@ public class FileEntity
             Name = Name,
             CreationTime = CreationTime,
             UpdateTime = UpdateTime,
-            Values = Values.Select(x => x.ToDto()).ToList(),
-            Result = Result.ToDto()
+            Values = Values?.Select(x => x.ToDto()).ToList(),
+            Result = Result?.ToDto()
         };
 }

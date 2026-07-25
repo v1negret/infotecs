@@ -1,5 +1,5 @@
 using Infotecs.Models.Requests;
-using Infotecs.Services;
+using Infotecs.Services.Interfaces;
 using Infotecs.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
@@ -10,9 +10,9 @@ namespace Infotecs.Controllers;
 [Route("[controller]")]
 public class FileController : ControllerBase
 {
-    private readonly FileService _fileService;
+    private readonly IFileService _fileService;
     private readonly IStringLocalizer<SharedResources> _localizer;
-    public FileController(FileService fileService, IStringLocalizer<SharedResources> localizer)
+    public FileController(IFileService fileService, IStringLocalizer<SharedResources> localizer)
     {
         _fileService = fileService;
         _localizer = localizer;
