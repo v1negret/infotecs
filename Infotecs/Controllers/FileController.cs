@@ -35,7 +35,7 @@ public class FileController : ControllerBase
     {
         var result = await _fileService.GetResultsByRequestAsync(request);
         if(!result.IsSuccess)
-            StatusCode(result.StatusCode, result.Message);
+            return StatusCode(result.StatusCode, result.Message);
         
         return Ok(result.Value);
     }
@@ -45,7 +45,7 @@ public class FileController : ControllerBase
     {
         var result = await _fileService.GetLastValues(fileName);
         if(!result.IsSuccess)
-            StatusCode(result.StatusCode, result.Message);
+            return StatusCode(result.StatusCode, result.Message);
         
         return Ok(result.Value);
     }
