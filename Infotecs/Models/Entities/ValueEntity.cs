@@ -1,5 +1,4 @@
 using Infotecs.Models.Dto;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace Infotecs.Models.Entities;
 

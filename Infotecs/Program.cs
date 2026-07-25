@@ -1,8 +1,6 @@
-using System.Globalization;
 using Infotecs.Data;
 using Infotecs.Repositories;
 using Infotecs.Services;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

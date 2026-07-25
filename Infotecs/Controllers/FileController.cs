@@ -1,4 +1,3 @@
-using Infotecs.Models;
 using Infotecs.Models.Requests;
 using Infotecs.Services;
 using Microsoft.AspNetCore.Mvc;
