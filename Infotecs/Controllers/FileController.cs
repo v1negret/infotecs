@@ -21,7 +21,7 @@ public class FileController : ControllerBase
     [HttpPost("upload")]
     public async Task<IActionResult> Upload(IFormFile file)
     {
-        if (file.Length == 0 || Path.GetExtension(file.FileName).Equals("csv"))
+        if (file.Length == 0 || !Path.GetExtension(file.FileName).Equals("csv"))
             return BadRequest(_localizer[SharedResources.WrongFileError].Value);
         var result = await _fileService.UploadFileAsync(file);
         if (!result.IsSuccess)
