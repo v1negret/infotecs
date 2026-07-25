@@ -4,19 +4,22 @@ using Infotecs.Models;
 using Infotecs.Models.Entities;
 using Infotecs.Models.Requests;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 namespace Infotecs.Repositories;
 
 public class FileRepository
 {
     private readonly ApplicationDbContext _dbContext;
+    private readonly IStringLocalizer<SharedResources> _localizer;
 
-    public FileRepository(ApplicationDbContext dbContext)
+    public FileRepository(ApplicationDbContext dbContext, IStringLocalizer<SharedResources> localizer)
     {
         _dbContext = dbContext;
+        _localizer = localizer;
     }
 
-    public async Task<FileEntity> AddAsync(FileEntity file)
+    public async Task<Result<FileEntity>> AddAsync(FileEntity file)
     {
         var existingFile = _dbContext.Files
             .Include(f => f.Values)
@@ -34,8 +37,7 @@ public class FileRepository
             existingFile.UpdateTime = DateTime.UtcNow;
             
             await _dbContext.SaveChangesAsync();
-            
-            return existingFile;
+            return new Result<FileEntity>(true, StatusCodes.Status200OK, existingFile, null);
         }
         
         file.CreationTime = DateTime.UtcNow;
@@ -43,10 +45,10 @@ public class FileRepository
         await _dbContext.Files.AddAsync(file);
         await _dbContext.SaveChangesAsync();
         
-        return file;
+        return new Result<FileEntity>(true, StatusCodes.Status200OK, file, null);
     }
 
-    public async Task<List<ResultEntity>> GetFilteredResultsAsync(GetResultsRequest request)
+    public async Task<Result<List<ResultEntity>>> GetFilteredResultsAsync(GetResultsRequest request)
     {
         var query = _dbContext.Results.AsNoTracking().AsQueryable();
 
@@ -65,18 +67,19 @@ public class FileRepository
                 r => r.AvgExecutionTime >= request.MinExecTime!.Value)
             .WhereIf(request.MaxExecTime.HasValue,
                 r => r.AvgExecutionTime <= request.MaxExecTime!.Value);
-
-        var result = await query
+        
+        var values = await query
             .ToListAsync();
 
-        return result;
+        return new Result<List<ResultEntity>>(true, StatusCodes.Status200OK, values, null);
     }
 
-    public async Task<List<ValueEntity>> GetLastValues(string fileName)
+    public async Task<Result<List<ValueEntity>>> GetLastValues(string fileName)
     {
         var file = await _dbContext.Files.FirstOrDefaultAsync(f => f.Name.Equals(fileName));
         if (file is null)
-            return new List<ValueEntity>();
+            return new Result<List<ValueEntity>>(false, StatusCodes.Status404NotFound, _localizer[SharedResources.FileNotFound].Value);
+        
         var values = _dbContext.Values
             .Where(v => v.FileUid.Equals(file.Uid))
             .OrderByDescending(v => v.Date)
@@ -84,7 +87,11 @@ public class FileRepository
             .AsEnumerable()
             .Reverse()
             .ToList();
-        return values;
+        
+        if (values.Count == 0)
+            return new Result<List<ValueEntity>>(false, StatusCodes.Status404NotFound, _localizer[SharedResources.LastValuesNotFound].Value);
+        
+        return new Result<List<ValueEntity>>(true, StatusCodes.Status200OK, values, null);
     }
 }
     

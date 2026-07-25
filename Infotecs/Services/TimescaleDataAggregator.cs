@@ -5,7 +5,7 @@ namespace Infotecs.Services;
 
 public class TimescaleDataAggregator
 {
-    public ResultEntity Aggregate(ICollection<ValueEntity> values)
+    public Result<ResultEntity> Aggregate(ICollection<ValueEntity> values)
     {
         var dateTimeDelta = GetDateTimeDelta(values);
         var minDateTime = values.Min(v => v.Date).Date;
@@ -15,7 +15,7 @@ public class TimescaleDataAggregator
         var maxValue = values.Max(v => v.Value);
         var minValue = values.Min(v => v.Value);
 
-        return new ResultEntity()
+        var resultEntity = new ResultEntity()
         {
             DateTimeDelta = dateTimeDelta,
             MinDateTime = minDateTime,
@@ -25,6 +25,8 @@ public class TimescaleDataAggregator
             MaxValue = maxValue,
             MinValue = minValue,
         };
+
+        return new Result<ResultEntity>(true, StatusCodes.Status200OK, resultEntity, null);
     }
 
     private int GetDateTimeDelta(ICollection<ValueEntity> values) 

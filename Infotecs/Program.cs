@@ -1,6 +1,8 @@
+using System.Globalization;
 using Infotecs.Data;
 using Infotecs.Repositories;
 using Infotecs.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
     opt.UseNpgsql(config.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddLocalization(opt => opt.ResourcesPath = "Shared");
 builder.Services.AddScoped<CsvService>();
 builder.Services.AddScoped<FileRepository>();
 builder.Services.AddScoped<TimescaleDataAggregator>();
