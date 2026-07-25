@@ -6,8 +6,7 @@ namespace Infotecs.Services.Interfaces;
 
 public interface IFileService
 {
-    public Task<Result<FileDto>> UploadFileAsync(IFormFile file);
-    
-    public Task<Result<List<ValueDto>>> GetLastValues(string fileName);
-    public Task<Result<List<ResultDto>>> GetResultsByRequestAsync(GetResultsRequest request);
+    public Task<Result<FileDto>> UploadFileAsync(IFormFile file, CancellationToken cancellationToken);
+    public Task<Result<List<ValueDto>>> GetLastValues(string fileName, CancellationToken cancellationToken);
+    public Task<Result<List<ResultDto>>> GetResultsByRequestAsync(GetResultsRequest request, CancellationToken cancellationToken);
 }

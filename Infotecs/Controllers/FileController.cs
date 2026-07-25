@@ -19,11 +19,11 @@ public class FileController : ControllerBase
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> Upload(IFormFile file)
+    public async Task<IActionResult> Upload(IFormFile file, CancellationToken cancellationToken = default)
     {
         if (file.Length == 0 || !Path.GetExtension(file.FileName).Equals(".csv", StringComparison.OrdinalIgnoreCase))
             return BadRequest(_localizer[SharedResources.WrongFileError].Value);
-        var result = await _fileService.UploadFileAsync(file);
+        var result = await _fileService.UploadFileAsync(file, cancellationToken);
         if (!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Message);
         
@@ -31,9 +31,9 @@ public class FileController : ControllerBase
     }
 
     [HttpPost("results")]
-    public async Task<IActionResult> GetResults(GetResultsRequest request)
+    public async Task<IActionResult> GetResults(GetResultsRequest request, CancellationToken cancellationToken = default)
     {
-        var result = await _fileService.GetResultsByRequestAsync(request);
+        var result = await _fileService.GetResultsByRequestAsync(request, cancellationToken);
         if(!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Message);
         
@@ -41,9 +41,9 @@ public class FileController : ControllerBase
     }
 
     [HttpGet("{fileName}")]
-    public async Task<IActionResult> GetLastValues(string fileName)
+    public async Task<IActionResult> GetLastValues(string fileName, CancellationToken cancellationToken = default)
     {
-        var result = await _fileService.GetLastValues(fileName);
+        var result = await _fileService.GetLastValues(fileName, cancellationToken);
         if(!result.IsSuccess)
             return StatusCode(result.StatusCode, result.Message);
         

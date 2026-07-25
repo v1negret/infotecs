@@ -21,13 +21,13 @@ public class FileService : IFileService
         _fileRepository = fileRepository;
     }
 
-    public async Task<Result<FileDto>> UploadFileAsync(IFormFile file)
+    public async Task<Result<FileDto>> UploadFileAsync(IFormFile file, CancellationToken cancellationToken)
     {
         var fileEntity = new FileEntity
         {
             Name = file.FileName,
         };
-        var values = (await _csvService.ReadAsync(file));
+        var values = await _csvService.ReadAsync(file);
         if (!values.IsSuccess)
             return new Result<FileDto>(values.IsSuccess, values.StatusCode, values.Message);
         
@@ -37,16 +37,16 @@ public class FileService : IFileService
         fileEntity.Values = values.Value.ToList();
         fileEntity.Result = result.Value;
         
-        var addedFile = await _fileRepository.AddAsync(fileEntity);
+        var addedFile = await _fileRepository.AddAsync(fileEntity, cancellationToken);
         if (!addedFile.IsSuccess)
             return new Result<FileDto>(addedFile.IsSuccess, addedFile.StatusCode, addedFile.Message);
         
         return new Result<FileDto>(addedFile.IsSuccess, addedFile.StatusCode, addedFile.Value.ToDto(), addedFile.Message);
     }
 
-    public async Task<Result<List<ResultDto>>> GetResultsByRequestAsync(GetResultsRequest request)
+    public async Task<Result<List<ResultDto>>> GetResultsByRequestAsync(GetResultsRequest request, CancellationToken cancellationToken)
     {
-        var filteredResults = await _fileRepository.GetFilteredResultsAsync(request);
+        var filteredResults = await _fileRepository.GetFilteredResultsAsync(request, cancellationToken);
         if (!filteredResults.IsSuccess)
             return new Result<List<ResultDto>>(filteredResults.IsSuccess, filteredResults.StatusCode, filteredResults.Message);
         
@@ -55,9 +55,9 @@ public class FileService : IFileService
         return new Result<List<ResultDto>>(filteredResults.IsSuccess, filteredResults.StatusCode, resultFilteredResults, filteredResults.Message);
     }
 
-    public async Task<Result<List<ValueDto>>> GetLastValues(string fileName)
+    public async Task<Result<List<ValueDto>>> GetLastValues(string fileName, CancellationToken cancellationToken)
     {
-        var values = await _fileRepository.GetLastValues(fileName);
+        var values = await _fileRepository.GetLastValues(fileName, cancellationToken);
         if (!values.IsSuccess)
             return new Result<List<ValueDto>>(values.IsSuccess, values.StatusCode, values.Message);
         

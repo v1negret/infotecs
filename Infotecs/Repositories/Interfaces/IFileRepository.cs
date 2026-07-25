@@ -6,9 +6,9 @@ namespace Infotecs.Repositories.Interfaces;
 
 public interface IFileRepository
 {
-    public Task<Result<FileEntity>> AddAsync(FileEntity file);
+    public Task<Result<FileEntity>> AddAsync(FileEntity file, CancellationToken cancellationToken);
 
-    public Task<Result<List<ResultEntity>>> GetFilteredResultsAsync(GetResultsRequest request);
+    public Task<Result<List<ResultEntity>>> GetFilteredResultsAsync(GetResultsRequest request, CancellationToken cancellationToken);
 
-    public Task<Result<List<ValueEntity>>> GetLastValues(string fileName);
+    public Task<Result<List<ValueEntity>>> GetLastValues(string fileName, CancellationToken cancellationToken);
 }

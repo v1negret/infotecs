@@ -21,7 +21,7 @@ public class FileRepository : IFileRepository
         _localizer = localizer;
     }
 
-    public async Task<Result<FileEntity>> AddAsync(FileEntity file)
+    public async Task<Result<FileEntity>> AddAsync(FileEntity file, CancellationToken cancellationToken = default)
     {
         var existingFile = _dbContext.Files
             .Include(f => f.Values)
@@ -38,19 +38,19 @@ public class FileRepository : IFileRepository
             existingFile.Values = file.Values;
             existingFile.UpdateTime = DateTime.UtcNow;
             
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
             return new Result<FileEntity>(true, StatusCodes.Status200OK, existingFile, null);
         }
         
         file.CreationTime = DateTime.UtcNow;
         
-        await _dbContext.Files.AddAsync(file);
-        await _dbContext.SaveChangesAsync();
+        await _dbContext.Files.AddAsync(file, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
         
         return new Result<FileEntity>(true, StatusCodes.Status200OK, file, null);
     }
 
-    public async Task<Result<List<ResultEntity>>> GetFilteredResultsAsync(GetResultsRequest request)
+    public async Task<Result<List<ResultEntity>>> GetFilteredResultsAsync(GetResultsRequest request, CancellationToken cancellationToken = default)
     {
         var query = _dbContext.Results.AsNoTracking().AsQueryable();
 
@@ -71,24 +71,23 @@ public class FileRepository : IFileRepository
                 r => r.AvgExecutionTime <= request.MaxExecTime!.Value);
         
         var values = await query
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new Result<List<ResultEntity>>(true, StatusCodes.Status200OK, values, null);
     }
 
-    public async Task<Result<List<ValueEntity>>> GetLastValues(string fileName)
+    public async Task<Result<List<ValueEntity>>> GetLastValues(string fileName, CancellationToken cancellationToken = default)
     {
-        var file = await _dbContext.Files.FirstOrDefaultAsync(f => f.Name.Equals(fileName));
+        var file = await _dbContext.Files.FirstOrDefaultAsync(f => f.Name.Equals(fileName), cancellationToken);
         if (file is null)
             return new Result<List<ValueEntity>>(false, StatusCodes.Status404NotFound, _localizer[SharedResources.FileNotFound].Value);
         
-        var values = _dbContext.Values
+        var values = (await _dbContext.Values
             .Where(v => v.FileUid.Equals(file.Uid))
             .OrderByDescending(v => v.Date)
             .Take(10)
-            .AsEnumerable()
-            .Reverse()
-            .ToList();
+            .ToListAsync(cancellationToken));
+        values.Reverse();
         
         if (values.Count == 0)
             return new Result<List<ValueEntity>>(false, StatusCodes.Status404NotFound, _localizer[SharedResources.LastValuesNotFound].Value);
