@@ -48,4 +48,10 @@
     <data name="InvalidValueRange" xml:space="preserve">
         <value>Значение показателя не может быть меньше 0.</value>
     </data>
+    <data name="InternalServerError" xml:space="preserve">
+        <value>Внутренняя ошибка сервера</value>
+    </data>
+    <data name="InternalServerErrorDetails" xml:space="preserve">
+        <value>Произошла непредвиденная ошибка. Повторите попытку позже.</value>
+    </data>
 </root>

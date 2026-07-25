@@ -3,6 +3,7 @@ using Infotecs.Extensions;
 using Infotecs.Models;
 using Infotecs.Models.Entities;
 using Infotecs.Models.Requests;
+using Infotecs.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 

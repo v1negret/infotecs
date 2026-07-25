@@ -1,4 +1,4 @@
-namespace Infotecs;
+namespace Infotecs.Shared;
 
 public class SharedResources
 {
@@ -12,4 +12,6 @@ public class SharedResources
     public const string InvalidDateTimeRange = "InvalidDateTimeRange";
     public const string InvalidExecutionTimeRange = "InvalidExecutionTimeRange";
     public const string InvalidValueRange = "InvalidValueRange";
+    public const string InternalServerError = "InternalServerError";
+    public const string InternalServerErrorDetails = "InternalServerErrorDetails";
 }

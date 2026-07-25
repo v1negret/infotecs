@@ -2,6 +2,7 @@ using System.Globalization;
 using CsvHelper;
 using Infotecs.Models;
 using Infotecs.Models.Entities;
+using Infotecs.Shared;
 using Microsoft.Extensions.Localization;
 
 namespace Infotecs.Services;

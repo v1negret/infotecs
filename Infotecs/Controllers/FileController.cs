@@ -1,5 +1,6 @@
 using Infotecs.Models.Requests;
 using Infotecs.Services;
+using Infotecs.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 
