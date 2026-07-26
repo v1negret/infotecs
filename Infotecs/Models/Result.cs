@@ -20,8 +20,20 @@ public class Result<TValue>
         Value = value;
         Message = message;
     }
+    /// <summary>
+    /// Успешно?
+    /// </summary>
     public bool IsSuccess { get; set; }
+    /// <summary>
+    /// Значение
+    /// </summary>
     public TValue? Value { get; set; }
+    /// <summary>
+    /// Номер кода ответа Http
+    /// </summary>
     public int StatusCode { get; set; }
+    /// <summary>
+    /// Сообщение
+    /// </summary>
     public string? Message { get; set; }
 }

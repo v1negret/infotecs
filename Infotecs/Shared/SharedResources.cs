@@ -1,6 +1,6 @@
 namespace Infotecs.Shared;
 
-public class SharedResources
+public abstract class SharedResources
 {
     public const string WrongDateTimeFormat = "WrongDateTimeFormat";
     public const string WrongValueFormat = "WrongValueFormat";
